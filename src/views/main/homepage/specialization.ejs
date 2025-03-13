@@ -1,0 +1,129 @@
+<% extend("../app.ejs") %>
+<section class="detail-nav">
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-2">
+                    <div class="menu-title text-decoration-none">
+                        <a href="/" class="text-decoration-none">
+                            <img class="menu-nav" src="/images/background/smile.png" alt="logo">
+                            <span class="text-decoration-none">Chăm sóc bác sĩ</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-8 d-flex flex-row justify-content-center align-self-center menu-type">
+                    <span class="d-block"><a href="/" class="text-decoration-none">Trang chủ</a></span>
+                    <span class="d-block mx-5"><a href="/for-patients" class="text-decoration-none">Dành cho bệnh nhân</a></span>
+                    <span class="d-block"><a href="/for-doctors" class="text-decoration-none">Dành cho bác sĩ</a></span>
+                </div>
+                <div class="col-2 d-flex justify-content-center align-items-center">
+                    <span><a href="https://www.youtube.com/channel/UCHqJxLo7mKam9GKqqwr2wfA?sub_confirmation=1" target="_blank" class="text-decoration-none">Cần hỗ trợ?</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="detail-info-specialization">
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mt-3">
+                    <a class="text-decoration-none" href="/">Trang chủ </a><span aria-hidden="true">&raquo;</span>
+                    <span style="text-transform: uppercase"> <%= specialization.name %></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-specialization">
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-8 mt-4" id="specializationDoctor">
+                    <% doctors.forEach(function(doctor) { %>
+                        <div class="d-flex flex-row each-doctor-spe">
+                            <div class="left-content col-5 d-flex">
+                                <div class="avatar-doctor-spe">
+                                    <img src="/images/users/<%= doctor.User.avatar %>">
+                                </div>
+                                <div class="intro-doctor-spe">
+                                    <div class="doctor-name"><%= doctor.User.name %></div>
+                                    <div class="doctor-address"><%= doctor.User.address %></div>
+                                    <div><a href="/detail/doctor/<%= doctor.User.id %>">Xem thêm...</a></div>
+                                </div>
+                            </div>
+                            <div class="right-content col-7">
+                                <div>
+                                    <div class="row header-booking">
+                                        <label for="day-book-spe" class="label-booking">LỊCH KHÁM:</label>
+                                    </div>
+                                    <select id="day-book-spe" class="form-control doctor-schedule-spe" data-doctor="<%= doctor.User.id %>">
+                                        <% sevenDaySchedule.forEach(function(day) { %>
+                                            <option value="<%= day %>"><%= day %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div id="div-schedule-<%= doctor.User.id %>" data-doctor-id="<%= doctor.User.id %>" class="d-flex flex-row flex-wrap text-decoration-none">
+                                    <% if(doctor.getDataValue('schedule').length === 0){ %>
+                                        <div class="no-schedule">
+                                            Bác sĩ "<%= doctor.User.name %>" không có lịch khám vào ngày <b><%= sevenDaySchedule[0] %></b>. Vui lòng chọn ngày khác.
+                                        </div>
+                                    <% } %>
+                                    <% doctor.getDataValue('schedule').forEach(function(x, index) { %>
+                                        <% if(x.getDataValue("isDisable") === false) { %>
+                                            <div id="spe-btn-modal-<%= x.id %>" data-doctor-id="<%= doctor.User.id %>" data-date="<%= x.date %>" data-time="<%= x.time %>" class="text-decoration-none show-modal-at-clinic-page">
+                                                <div class="doctor-time">
+                                                    <%= x.time %>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                        <% if(index === doctor.getDataValue('schedule').length - 1 && x.getDataValue("isDisable") === true){ %>
+                                            <div>Không có lịch khám nào trong khung giờ hiện tại. Vui lòng chọn khung giờ khác.</div>
+                                        <% } %>
+                                    <% }) %>
+                                </div>
+                                <div id="div-more-info-<%= doctor.User.id %>">
+                                    <% if(doctor.getDataValue('schedule').length > 0){ %>
+                                        <div class="d-flex flex-column">
+                                            <div>
+                                                <span class="d-block mt-2">Chọn <i class="fa fa-hand-o-up" aria-hidden="true"></i> để đặt lịch khám miễn phí</span>
+                                            </div>
+                                            <div style="border-top: 1px solid #ccc" class="d-flex flex-column">
+                                                <span class="d-block pt-3 pb-1" style="text-transform: uppercase">Địa chỉ khám bệnh:</span>
+                                                <span class="d-block pb-1" style="border-bottom: 1px solid #ccc"><%= doctor.User.address %></span>
+                                            </div>
+                                            <span class="d-block pt-2">Giá: 50 USD</span>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+                <div class="col-4 mt-3">
+                    GIỚI THIỆU:
+                    <hr>
+                    <div>CHUYÊN KHOA: <%= specialization.name %></div>
+                    <% if(post) { %>
+                        <div class="content-description-spe pt-2"><%- post.contentHTML %> </div>
+                    <% } %>
+                    <hr>
+                    <div class="spe-category">
+                        CÁC CHUYÊN KHOA KHÁC:
+                        <ul>
+                            <% listSpecializations.forEach(function(spe) { %>
+                                <% if(spe.id !== specialization.id ){ %>
+                                    <li class="text-decoration-none mt-2">
+                                        <a class="text-decoration-none" href="/detail/specialization/<%= spe.id %>"><%= spe.name %></a>
+                                    </li>
+                                <% } %>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Đăng ký tài khoản mới với Doctors Care</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="/components/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/components/font-awesome/css/font-awesome.min.css">
+    <script src="/components/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .lg-body {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 900px;
+        }
+
+        .lg-image-background {
+            background: url('images/background/header-cover.jpg') no-repeat center;
+            background-size: cover;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .login-form {
+            padding: 40px;
+        }
+
+        .text-login {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+        }
+
+        .form-control {
+            border-radius: 6px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 8px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-register {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 6px;
+            width: 100%;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .btn-register:hover {
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .lg-register {
+            color: #4facfe;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .lg-register:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="login">
+    <div class="container lg-body">
+        <div class="container d-flex flex-row">
+            <div class="col-6 lg-image-background">
+            </div>
+            <div class="col-6 login-form">
+                <span class="text-login">Đăng ký tài khoản mới</span>
+                <% if(locals.hasErrors){ %>
+                    <p style="color: red">Có lỗi xảy ra, vui lòng kiểm tra lại thông tin</p>
+                <% } %>
+                <form method="POST" action="/register">
+                    <div class="form-group">
+                        <label for="name">Họ và tên:</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="<% if (locals.oldData) { %> <%= locals.oldData.name %> <% } %>"
+                               placeholder="Nhập họ và tên...">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *:</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               placeholder="Nhập địa chỉ email..."
+                               value="<% if (locals.oldData) { %> <%= locals.oldData.email %> <% } %>">
+                        <% if (locals.errEmail) { %>
+                            <small class="form-text invalid-feedback"><%= locals.errEmail %></small>
+                        <% } %>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu *:</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Nhập mật khẩu...">
+                        <% if (locals.errPassword) { %>
+                            <small class="form-text invalid-feedback"><%= locals.errPassword %></small>
+                        <% } %>
+                    </div>
+                    <div class="form-group">
+                        <label for="rg-password-again">Xác nhận mật khẩu *:</label>
+                        <input type="password" class="form-control" id="rg-password-again" name="passwordConfirm"
+                               placeholder="Nhập lại mật khẩu...">
+                        <% if (locals.errPasswordConfirm) { %>
+                            <small class="form-text invalid-feedback"><%= locals.errPasswordConfirm %></small>
+                        <% } %>
+                    </div>
+
+                    <div>
+                        <span>(Các thông tin đánh dấu * là bắt buộc)</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-register">ĐĂNG KÝ</button>
+                </form>
+                <br>
+                <hr>
+                <span>Đã có tài khoản? <a class="lg-register" href="/login">Quay lại trang đăng nhập</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
